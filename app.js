@@ -10,6 +10,8 @@ const { CONNECTION_STRING } = require("./src/config/config");
 
 const app = express();
 const authRoute = require("./src/routes/authRoute");
+const categoryRoute = require("./src/routes/categoryRoute");
+const productRoute = require("./src/routes/productRoute");
 
 // ============ Middlewares généraux =============
 app.use(cors({ origin: "http://localhost:4200", credentials: true }));
@@ -36,4 +38,8 @@ mongoose
 
 // ============ Routes =============
 app.use("/auth", authRoute);
+app.use("/categories", categoryRoute);
+app.use("/products", productRoute);
+
+
 module.exports = app;
