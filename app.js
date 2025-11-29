@@ -12,6 +12,12 @@ const app = express();
 const authRoute = require("./src/routes/authRoute");
 const categoryRoute = require("./src/routes/categoryRoute");
 const productRoute = require("./src/routes/productRoute");
+const orderRoute = require("./src/routes/orderRoute");
+const couponRoute = require("./src/routes/couponRoute");
+const wishlistRoute = require("./src/routes/wishlistRoute");   // 🆕
+const addressRoute = require("./src/routes/addressRoute");
+const reviewRoute = require("./src/routes/reviewRoute");
+const cartRoute = require("./src/routes/cartRoute");
 
 // ============ Middlewares généraux =============
 app.use(cors({ origin: "http://localhost:4200", credentials: true }));
@@ -40,6 +46,12 @@ mongoose
 app.use("/auth", authRoute);
 app.use("/categories", categoryRoute);
 app.use("/products", productRoute);
+app.use("/orders", orderRoute);
+app.use("/coupons", couponRoute);
+app.use("/wishlist", wishlistRoute);                          
+app.use("/addresses", addressRoute);
+app.use("/reviews", reviewRoute);
+app.use("/cart", cartRoute);
 
 
 module.exports = app;

@@ -18,6 +18,8 @@ const productSchema = new mongoose.Schema(
 
     tags: [{ type: String }],
     isFeatured: { type: Boolean, default: false }, // produit mis en avant
+    averageRating: { type: Number, default: 0 }, // moyenne 0–5
+    reviewsCount: { type: Number, default: 0 }, // nombre d’avis
   },
   { timestamps: true }
 );

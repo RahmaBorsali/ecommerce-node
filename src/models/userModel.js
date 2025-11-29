@@ -14,6 +14,12 @@ const userSchema = new mongoose.Schema(
     password: { type: String, required: true },
     address: { type: String, trim: true },
     isVerified: { type: Boolean, default: false },
+        wishlist: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+      },
+    ],
   },
   { timestamps: true }
 );
