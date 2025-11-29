@@ -9,6 +9,7 @@ const moment = require("moment-timezone");
 const { CONNECTION_STRING } = require("./src/config/config");
 
 const app = express();
+const authRoute = require("./src/routes/authRoute");
 
 // ============ Middlewares généraux =============
 app.use(cors({ origin: "http://localhost:4200", credentials: true }));
@@ -34,14 +35,5 @@ mongoose
 
 
 // ============ Routes =============
-// Pour l’instant juste une route de test
-app.get("/", (req, res) => {
-  res.send("API OPM PFE is running ✅");
-});
-
-// Plus tard tu ajouteras ici :
-// const authRoute = require("./src/routes/authRoute");
-// app.use("/auth", authRoute);
-// etc...
-
+app.use("/auth", authRoute);
 module.exports = app;
