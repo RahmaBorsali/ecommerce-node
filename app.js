@@ -5,7 +5,6 @@ const mongoose = require("mongoose");
 const path = require("path");
 const cors = require("cors");
 const moment = require("moment-timezone");
-require("dotenv").config();
 
 const { CONNECTION_STRING } = require("./src/config/config");
 
@@ -29,12 +28,10 @@ moment.tz.setDefault("Africa/Tunis");
 mongoose.set("strictQuery", true);
 
 mongoose
-  .connect(CONNECTION_STRING, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(CONNECTION_STRING)
   .then(() => console.log("✅ Connected to MongoDB"))
   .catch((err) => console.log("❌ MongoDB connection error:", err));
+
 
 // ============ Routes =============
 // Pour l’instant juste une route de test
