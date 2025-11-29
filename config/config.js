@@ -1,0 +1,15 @@
+require("dotenv").config();
+
+module.exports = {
+    PORT: process.env.PORT,
+    CONNECTION_STRING: process.env.CONNECTION_STRING,
+    SERVER_URL: process.env.SERVER_URL,
+    FRONT_SERVER_URL: process.env.FRONT_SERVER_URL,
+    FRONT_SERVER_URL_PUBLIC: process.env.FRONT_SERVER_URL_PUBLIC,
+    MAILING_EMAIL: process.env.MAILING_EMAIL,
+    MAILING_PASSWORD: process.env.MAILING_PASSWORD,
+    MAILING_PORT: process.env.MAILING_PORT,
+    MAILING_HOST: process.env.MAILING_HOST,
+    MAILBOXLAYER_API_KEY: process.env.MAILBOXLAYER_API_KEY,
+
+}
