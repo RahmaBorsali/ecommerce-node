@@ -1,3 +1,4 @@
+// src/controllers/orderController.js
 const Order = require("../models/orderModel");
 const Product = require("../models/productModel");
 const Coupon = require("../models/couponModel");
@@ -5,11 +6,12 @@ const Coupon = require("../models/couponModel");
 const BASE_SHIPPING = 8;
 const FREE_SHIPPING_THRESHOLD = 8000;
 
-exports.createOrder = async (req, res) => {
+// =============== CREATE ORDER =================
+const createOrder = async (req, res) => {
   try {
     const {
-      userId,           
-      items,            
+      userId,           // optionnel
+      items,            // [{ productId, quantity }]
       couponCode,
       shippingAddress,
       paymentMethod,
@@ -66,7 +68,6 @@ exports.createOrder = async (req, res) => {
       });
 
       if (coupon) {
-        // minAmount
         if (!coupon.minAmount || subtotal >= coupon.minAmount) {
           if (coupon.type === "PERCENT") {
             discount = (subtotal * coupon.value) / 100;
@@ -94,7 +95,7 @@ exports.createOrder = async (req, res) => {
       couponCode: appliedCouponCode,
       shippingAddress,
       paymentMethod,
-      paymentStatus: "PAID", // pour l'instant on simule un succès
+      paymentStatus: "PAID", // pour l’instant
       status: "NEW",
     });
 
@@ -104,16 +105,17 @@ exports.createOrder = async (req, res) => {
     return res.status(500).json({ message: "Erreur serveur" });
   }
 };
-exports.getOrdersByUser = async (req, res) => {
+
+// =============== GET ORDERS BY USER =================
+const getOrdersByUser = async (req, res) => {
   try {
-    const userId = req.params.userId; // /orders/user/:userId
+    const userId = req.params.userId;
 
     if (!userId) {
       return res.status(400).json({ message: "userId manquant." });
     }
 
-    const orders = await Order.find({ user: userId })
-      .sort({ createdAt: -1 });
+    const orders = await Order.find({ user: userId }).sort({ createdAt: -1 });
 
     return res.status(200).json(orders);
   } catch (err) {
@@ -122,8 +124,8 @@ exports.getOrdersByUser = async (req, res) => {
   }
 };
 
-// 2) Toutes les commandes (pour admin)
-exports.getAllOrders = async (req, res) => {
+// =============== GET ALL ORDERS =================
+const getAllOrders = async (req, res) => {
   try {
     const orders = await Order.find()
       .populate("user", "firstName lastName email")
@@ -136,10 +138,10 @@ exports.getAllOrders = async (req, res) => {
   }
 };
 
-// 3) Mise à jour du statut d'une commande
-exports.updateOrderStatus = async (req, res) => {
+// =============== UPDATE ORDER STATUS =================
+const updateOrderStatus = async (req, res) => {
   try {
-    const { id } = req.params;           // /orders/:id/status
+    const { id } = req.params;
     const { status, paymentStatus } = req.body;
 
     if (!status && !paymentStatus) {
@@ -152,9 +154,7 @@ exports.updateOrderStatus = async (req, res) => {
     if (status) update.status = status;
     if (paymentStatus) update.paymentStatus = paymentStatus;
 
-    const order = await Order.findByIdAndUpdate(id, update, {
-      new: true,
-    });
+    const order = await Order.findByIdAndUpdate(id, update, { new: true });
 
     if (!order) {
       return res.status(404).json({ message: "Commande introuvable." });
@@ -165,4 +165,12 @@ exports.updateOrderStatus = async (req, res) => {
     console.error("updateOrderStatus error:", err);
     return res.status(500).json({ message: "Erreur serveur" });
   }
+};
+
+// ✅ Export clair
+module.exports = {
+  createOrder,
+  getOrdersByUser,
+  getAllOrders,
+  updateOrderStatus,
 };

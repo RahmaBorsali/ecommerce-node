@@ -13,5 +13,4 @@ router.get("/", orderController.getAllOrders);
 
 // Mettre à jour le statut d'une commande
 router.patch("/:id/status", orderController.updateOrderStatus);
-
 module.exports = router;

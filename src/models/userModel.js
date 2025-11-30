@@ -13,6 +13,10 @@ const userSchema = new mongoose.Schema(
     },
     password: { type: String, required: true },
     address: { type: String, trim: true },
+    city:      { type: String, trim: true },
+    country:   { type: String, trim: true },
+    phone:     { type: String, trim: true },
+    avatarUrl: { type: String, default: null },
     isVerified: { type: Boolean, default: false },
         wishlist: [
       {

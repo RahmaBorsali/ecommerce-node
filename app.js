@@ -14,11 +14,14 @@ const categoryRoute = require("./src/routes/categoryRoute");
 const productRoute = require("./src/routes/productRoute");
 const orderRoute = require("./src/routes/orderRoute");
 const couponRoute = require("./src/routes/couponRoute");
-const wishlistRoute = require("./src/routes/wishlistRoute");   // 🆕
+const wishlistRoute = require("./src/routes/wishlistRoute");  
 const addressRoute = require("./src/routes/addressRoute");
 const reviewRoute = require("./src/routes/reviewRoute");
 const cartRoute = require("./src/routes/cartRoute");
+const userRoute = require("./src/routes/userRoute");
 
+const swaggerUi = require("swagger-ui-express");
+const swaggerJsdoc = require("swagger-jsdoc");
 // ============ Middlewares généraux =============
 app.use(cors({ origin: "http://localhost:4200", credentials: true }));
 
@@ -41,6 +44,30 @@ mongoose
   .then(() => console.log("✅ Connected to MongoDB"))
   .catch((err) => console.log("❌ MongoDB connection error:", err));
 
+// ============ Swagger / OpenAPI =============
+const swaggerOptions = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "Ecommerce API",
+      version: "1.0.0",
+      description: "API de ton site e-commerce (auth, produits, commandes, etc.)",
+    },
+    servers: [
+      {
+        url: "http://localhost:3000",
+      },
+    ],
+  },
+  // tous tes fichiers de routes Express
+  apis: ["./src/routes/*.js"],
+};
+
+const swaggerSpec = swaggerJsdoc(swaggerOptions);
+
+// URL de la doc : http://localhost:3000/api-docs
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 
 // ============ Routes =============
 app.use("/auth", authRoute);
@@ -52,6 +79,7 @@ app.use("/wishlist", wishlistRoute);
 app.use("/addresses", addressRoute);
 app.use("/reviews", reviewRoute);
 app.use("/cart", cartRoute);
+app.use("/users", userRoute);
 
 
 module.exports = app;
