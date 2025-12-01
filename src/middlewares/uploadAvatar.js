@@ -1,29 +1,26 @@
-const multer = require("multer");
-const path = require("path");
+// src/middlewares/uploadAvatar.js
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 
-// dossier /uploads/avatars (app.js sert déjà /uploads en statique)
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, "../../uploads/avatars"));
-  },
-  filename: (req, file, cb) => {
-    const unique = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    const ext = path.extname(file.originalname);
-    cb(null, unique + ext);
-  },
-});
+// Dossier uploads/avatars à la racine du projet
+const AVATAR_DIR = path.join(__dirname, '../../uploads/avatars');
 
-function fileFilter(req, file, cb) {
-  if (!file.mimetype.startsWith("image/")) {
-    return cb(new Error("Seules les images sont autorisées."), false);
-  }
-  cb(null, true);
+// Création du dossier si besoin
+if (!fs.existsSync(AVATAR_DIR)) {
+  fs.mkdirSync(AVATAR_DIR, { recursive: true });
 }
 
-const uploadAvatar = multer({
-  storage,
-  fileFilter,
-  limits: { fileSize: 2 * 1024 * 1024 }, // 2 Mo
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, AVATAR_DIR);
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname) || '.jpg';
+    cb(null, `avatar-${Date.now()}${ext}`);
+  },
 });
+
+const uploadAvatar = multer({ storage });
 
 module.exports = uploadAvatar;

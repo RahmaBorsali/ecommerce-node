@@ -27,8 +27,7 @@ app.use(cors({ origin: "http://localhost:4200", credentials: true }));
 
 // Si tu veux déjà prévoir des dossiers statiques (optionnel)
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-app.use("/pdfs", express.static(path.join(__dirname, "pdfs")));
-app.use("/word", express.static(path.join(__dirname, "word")));
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

@@ -69,8 +69,7 @@ exports.addToWishlist = async (req, res) => {
   }
 };
 
-// DELETE /wishlist
-// body: { userId, productId }
+
 exports.removeFromWishlist = async (req, res) => {
   try {
     const { userId, productId } = req.body;
@@ -100,3 +99,29 @@ exports.removeFromWishlist = async (req, res) => {
     return res.status(500).json({ message: "Erreur serveur" });
   }
 };
+// DELETE /wishlist/clear/:userId
+exports.clearWishlist = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    if (!userId) {
+      return res.status(400).json({ message: "userId manquant." });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "Utilisateur introuvable." });
+    }
+
+    user.wishlist = [];
+    await user.save();
+
+    return res
+      .status(200)
+      .json({ message: "Wishlist vidée.", wishlist: user.wishlist });
+  } catch (err) {
+    console.error("clearWishlist error:", err);
+    return res.status(500).json({ message: "Erreur serveur" });
+  }
+};
+

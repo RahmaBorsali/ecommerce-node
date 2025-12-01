@@ -10,8 +10,8 @@ const FREE_SHIPPING_THRESHOLD = 8000;
 const createOrder = async (req, res) => {
   try {
     const {
-      userId,           // optionnel
-      items,            // [{ productId, quantity }]
+      userId,          
+      items,            
       couponCode,
       shippingAddress,
       paymentMethod,

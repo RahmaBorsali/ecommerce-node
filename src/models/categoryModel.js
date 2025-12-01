@@ -18,6 +18,8 @@ const categorySchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    icon: { type: String },  
+    image: { type: String },  
     isActive: {
       type: Boolean,
       default: true,

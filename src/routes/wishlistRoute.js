@@ -11,4 +11,6 @@ router.post("/", wishlistController.addToWishlist);
 // Retirer un produit de la wishlist
 router.delete("/", wishlistController.removeFromWishlist);
 
+router.delete("/clear/:userId", wishlistController.clearWishlist);
+
 module.exports = router;

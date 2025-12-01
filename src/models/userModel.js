@@ -18,10 +18,11 @@ const userSchema = new mongoose.Schema(
     phone:     { type: String, trim: true },
     avatarUrl: { type: String, default: null },
     isVerified: { type: Boolean, default: false },
-        wishlist: [
+     wishlist: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Product",
+        default: undefined, 
       },
     ],
   },

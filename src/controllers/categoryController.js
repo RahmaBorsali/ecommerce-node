@@ -3,18 +3,31 @@ const Category = require("../models/categoryModel");
 // CREATE
 exports.createCategory = async (req, res) => {
   try {
-    const { name, slug, description } = req.body;
+    const { name, slug, description, icon, image, isActive } = req.body;
 
     if (!name || !slug) {
-      return res.status(400).json({ message: "name et slug sont obligatoires." });
+      return res
+        .status(400)
+        .json({ message: "name et slug sont obligatoires." });
     }
 
+    // vérifier si name OU slug existent déjà
     const exists = await Category.findOne({ $or: [{ name }, { slug }] });
     if (exists) {
-      return res.status(400).json({ message: "Cette catégorie existe déjà (name ou slug)." });
+      return res
+        .status(400)
+        .json({ message: "Cette catégorie existe déjà (name ou slug)." });
     }
 
-    const category = await Category.create({ name, slug, description });
+    const category = await Category.create({
+      name,
+      slug,
+      description,
+      icon,
+      image,
+      isActive: isActive ?? true,
+    });
+
     return res.status(201).json(category);
   } catch (err) {
     console.error("createCategory error:", err);
@@ -46,4 +59,3 @@ exports.getCategoryById = async (req, res) => {
     return res.status(500).json({ message: "Erreur serveur" });
   }
 };
-

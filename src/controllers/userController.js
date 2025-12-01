@@ -54,6 +54,7 @@ exports.updateProfile = async (req, res) => {
     return res.status(500).json({ message: "Erreur serveur" });
   }
 };
+
 exports.updateAvatar = async (req, res) => {
   try {
     const { id } = req.params;
@@ -67,8 +68,9 @@ exports.updateAvatar = async (req, res) => {
       return res.status(404).json({ message: "Utilisateur introuvable." });
     }
 
-    // URL publique de l’avatar
-    const avatarUrl = `${SERVER_URL}/uploads/avatars/${req.file.filename}`;
+    // URL absolue basée sur la requête
+    const baseUrl = `${req.protocol}://${req.get("host")}`;
+    const avatarUrl = `${baseUrl}/uploads/avatars/${req.file.filename}`;
 
     user.avatarUrl = avatarUrl;
     await user.save();
@@ -85,3 +87,5 @@ exports.updateAvatar = async (req, res) => {
     return res.status(500).json({ message: "Erreur serveur" });
   }
 };
+
+
