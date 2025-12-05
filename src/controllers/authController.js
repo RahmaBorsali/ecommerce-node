@@ -25,9 +25,10 @@ exports.signup = async (req, res) => {
   try {
     const { firstName, lastName, email, address, password } = req.body;
 
-    if (!firstName || !lastName || !email || !password) {
+    if (!isStrongPassword(password)) {
       return res.status(400).json({
-        message: "Prénom, nom, email et mot de passe sont obligatoires.",
+        message:
+          "Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre.",
       });
     }
 
@@ -189,7 +190,6 @@ exports.verifyEmail = async (req, res) => {
     console.error("Erreur dans verifyEmail :", error);
     return res.status(500).send("Erreur serveur");
   }
-  
 };
 // ================== LOGIN ==================
 exports.login = async (req, res) => {
@@ -236,7 +236,7 @@ exports.login = async (req, res) => {
 
     // 5) Générer les tokens
     const accessToken = jwt.sign(payload, ACCESS_TOKEN_PRIVATE_KEY, {
-      expiresIn: "15m",
+      expiresIn: "2h",
     });
 
     const refreshToken = jwt.sign(payload, REFRESH_TOKEN_PRIVATE_KEY, {
@@ -265,4 +265,43 @@ exports.login = async (req, res) => {
     return res.status(500).json({ message: "Erreur serveur" });
   }
 };
+exports.refreshToken = async (req, res) => {
+  try {
+    const { refreshToken } = req.body;
 
+    if (!refreshToken) {
+      return res.status(400).json({ message: "Refresh token manquant." });
+    }
+
+    // Vérifier que le refreshToken est valide
+    jwt.verify(refreshToken, REFRESH_TOKEN_PRIVATE_KEY, (err, user) => {
+      if (err) {
+        return res.status(403).json({ message: "Refresh token invalide." });
+      }
+
+      // Créer un nouveau access token
+      const payload = {
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+      };
+
+      const newAccessToken = jwt.sign(payload, ACCESS_TOKEN_PRIVATE_KEY, {
+        expiresIn: "15m",
+      });
+
+      return res.status(200).json({
+        token: newAccessToken,
+      });
+    });
+  } catch (error) {
+    console.error("Erreur refreshToken :", error);
+    return res.status(500).json({ message: "Erreur serveur" });
+  }
+};
+function isStrongPassword(password) {
+  // min 8 caractères, 1 maj, 1 min, 1 chiffre
+  const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/;
+  return pattern.test(password);
+}

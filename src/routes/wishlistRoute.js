@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const wishlistController = require("../controllers/wishlistController");
+const auth = require("../middlewares/auth");
+router.use(auth);
 
 // Récupérer la wishlist d'un user
 router.get("/:userId", wishlistController.getWishlist);

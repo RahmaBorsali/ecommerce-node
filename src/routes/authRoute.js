@@ -12,5 +12,9 @@ router.get("/verify-email", authController.verifyEmail);
 // POST /auth/login
 router.post("/login", authController.login);
 
+router.post("/refresh", authController.refreshToken);
+
+module.exports = router;
+
 
 module.exports = router;

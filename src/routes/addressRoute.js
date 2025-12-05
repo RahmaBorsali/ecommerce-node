@@ -1,7 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const addressController = require("../controllers/addressController");
+const auth = require("../middlewares/auth");
 
+router.use(auth);
 // Créer une adresse
 router.post("/", addressController.createAddress);
 

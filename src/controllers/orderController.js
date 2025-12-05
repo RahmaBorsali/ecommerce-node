@@ -108,19 +108,19 @@ const createOrder = async (req, res) => {
 
 // =============== GET ORDERS BY USER =================
 const getOrdersByUser = async (req, res) => {
-  try {
-    const userId = req.params.userId;
+   try {
+    const { userId } = req.params;
 
-    if (!userId) {
-      return res.status(400).json({ message: "userId manquant." });
-    }
+    // 🔍 juste pour debug, tu peux laisser temporairement
+    console.log("getOrdersByUser -> req.user =", req.user, "param userId =", userId);
 
+    // 👉 on fait comme pour les adresses : on fait confiance au paramètre
     const orders = await Order.find({ user: userId }).sort({ createdAt: -1 });
 
-    return res.status(200).json(orders);
+    return res.json(orders);
   } catch (err) {
-    console.error("getOrdersByUser error:", err);
-    return res.status(500).json({ message: "Erreur serveur" });
+    console.error("getOrdersByUser error :", err);
+    return res.status(500).json({ message: "Erreur serveur lors de la récupération des commandes." });
   }
 };
 
