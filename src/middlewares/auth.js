@@ -6,7 +6,9 @@ module.exports = (req, res, next) => {
 
   // Le token doit être sous forme "Bearer TOKEN"
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res.status(401).json({ message: "Accès refusé. Token manquant." });
+    return res
+      .status(401)
+      .json({ message: "Accès refusé. Token manquant.", code: "NO_TOKEN" });
   }
 
   const token = authHeader.split(" ")[1];
@@ -17,9 +19,21 @@ module.exports = (req, res, next) => {
     // Ajouter l'utilisateur décodé à req.user
     req.user = decoded;
 
-    next();
+    return next();
   } catch (err) {
     console.error("Erreur token :", err);
-    return res.status(401).json({ message: "Token invalide ou expiré." });
+
+    if (err.name === "TokenExpiredError") {
+      // 👇 Très important : code spécial pour le front
+      return res.status(401).json({
+        message: "Token expiré.",
+        code: "TOKEN_EXPIRED",
+      });
+    }
+
+    return res.status(401).json({
+      message: "Token invalide.",
+      code: "INVALID_TOKEN",
+    });
   }
 };
