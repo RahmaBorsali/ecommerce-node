@@ -31,7 +31,6 @@ async function recomputeProductRating(productId) {
 }
 
 // POST /reviews
-// body: { productId, userId (optionnel), rating, comment }
 exports.createReview = async (req, res) => {
   try {
     const { productId, userId, rating, comment } = req.body;
@@ -63,7 +62,6 @@ exports.createReview = async (req, res) => {
       }
     }
 
-    // Option: empêcher plusieurs avis par le même user pour le même produit
     let review;
     if (userId) {
       review = await Review.findOne({ product: productId, user: userId });

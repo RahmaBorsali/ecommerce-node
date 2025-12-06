@@ -1,7 +1,7 @@
 const Cart = require("../models/cartModel");
 const Product = require("../models/productModel");
 
-// 🧾 Récupérer le panier d'un user
+// Récupérer le panier d'un user
 exports.getCartByUser = async (req, res) => {
   try {
     const { userId } = req.params; // /cart/user/:userId
@@ -22,7 +22,7 @@ exports.getCartByUser = async (req, res) => {
   }
 };
 
-// ➕ Ajouter un produit au panier
+// Ajouter un produit au panier
 exports.addItem = async (req, res) => {
   try {
     const { userId, productId, quantity } = req.body;
@@ -70,7 +70,7 @@ exports.addItem = async (req, res) => {
   }
 };
 
-// 🔁 Mettre à jour la quantité d'un produit
+// Mettre à jour la quantité d'un produit
 exports.updateItemQuantity = async (req, res) => {
   try {
     const { userId, productId, quantity } = req.body;
@@ -111,7 +111,7 @@ exports.updateItemQuantity = async (req, res) => {
   }
 };
 
-// ❌ Supprimer un produit du panier
+// Supprimer un produit du panier
 exports.removeItem = async (req, res) => {
   try {
     const { userId, productId } = req.body;
@@ -139,7 +139,7 @@ exports.removeItem = async (req, res) => {
   }
 };
 
-// 🧹 Vider entièrement le panier
+// Vider entièrement le panier
 exports.clearCart = async (req, res) => {
   try {
     const { userId } = req.params;

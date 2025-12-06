@@ -27,7 +27,6 @@ exports.getWishlist = async (req, res) => {
 };
 
 // POST /wishlist
-// body: { userId, productId }
 exports.addToWishlist = async (req, res) => {
   try {
     const { userId, productId } = req.body;

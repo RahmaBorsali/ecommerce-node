@@ -20,13 +20,14 @@ const reviewRoute = require("./src/routes/reviewRoute");
 const cartRoute = require("./src/routes/cartRoute");
 const userRoute = require("./src/routes/userRoute");
 
-const swaggerUi = require("swagger-ui-express");
-const swaggerJsdoc = require("swagger-jsdoc");
-// ============ Middlewares généraux =============
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./src/config/swagger');
+
 app.use(cors({ origin: "http://localhost:4200", credentials: true }));
 
 // Si tu veux déjà prévoir des dossiers statiques (optionnel)
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 
 app.use(bodyParser.json());
@@ -62,7 +63,6 @@ const swaggerOptions = {
   apis: ["./src/routes/*.js"],
 };
 
-const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
 // URL de la doc : http://localhost:3000/api-docs
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
